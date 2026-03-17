@@ -702,8 +702,8 @@ async function submitFeedback(searchId, categories){
   if(!ivrRec){alert('Please select a recommendation.');return;}
   const allKeys=[];
   categories.forEach(cat=>(cat.items||[]).forEach(item=>allKeys.push(`${cat.name}||${item.label}`)));
-  const missing=allKeys.filter(k=>ivrRatings[k]==null);
-  if(missing.length){alert('Please rate all items before submitting.');return;}
+  const answered=allKeys.filter(k=>ivrRatings[k]!=null);
+  if(!answered.length){alert('Please rate at least one item before submitting.');return;}
   const btn=document.getElementById('submitFbBtn');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Submitting...';
   try{
