@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Feedback — Advent</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f0f0f;
+  --ink-2: #3a3a3a;
+  --ink-3: #717171;
+  --ink-4: #a8a8a8;
+  --line: #e8e8e8;
+  --line-2: #f0f0f0;
+  --bg: #fafafa;
+  --white: #ffffff;
+  --accent: #0f0f0f;
+  --green: #1a7a4a;
+  --green-bg: #eaf4ee;
+  --red: #c0392b;
+  --red-bg: #fcecea;
+  --amber: #8a5c00;
+  --amber-bg: #fef7e6;
+  --blue: #1a4a8a;
+  --blue-bg: #eaf0fa;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 14px; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem;
+}
+.topbar-brand { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.topbar-nav { display: flex; gap: 4px; }
+.topbar-nav button {
+  background: none; border: none; cursor: pointer;
+  font-family: inherit; font-size: 13px; color: var(--ink-3);
+  padding: 6px 12px; border-radius: 6px; transition: all .15s;
+}
+.topbar-nav button:hover { background: var(--line-2); color: var(--ink); }
+.topbar-nav button.active { background: var(--ink); color: var(--white); }
+.topbar-right { display: flex; gap: 8px; align-items: center; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 80px 2rem 3rem; }
+.wrap-narrow { max-width: 560px; margin: 0 auto; padding: 80px 2rem 3rem; }
+.gate-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+}
+.gate-box {
+  background: var(--white); border: 1px solid var(--line);
+  border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 400px;
+  text-align: center;
+}
+.gate-box .logo { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 2rem; }
+.gate-box h1 { font-size: 22px; font-weight: 500; margin-bottom: .4rem; }
+.gate-box p { font-size: 13px; color: var(--ink-3); margin-bottom: 2rem; }
+.gate-divider { border: none; border-top: 1px solid var(--line); margin: 1.5rem 0; }
+.card {
+  background: var(--white); border: 1px solid var(--line);
+  border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;
+}
+.card-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink-4); margin-bottom: 1rem;
+}
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-size: 12px; font-weight: 500; color: var(--ink-2); margin-bottom: 5px; }
+input, select, textarea {
+  width: 100%; padding: 9px 12px;
+  border: 1px solid var(--line); border-radius: 8px;
+  font-family: inherit; font-size: 13px; color: var(--ink);
+  background: var(--white); transition: border-color .15s;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--ink-2); }
+input::placeholder, textarea::placeholder { color: var(--ink-4); }
+textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: 8px; font-family: inherit;
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s;
+  border: 1px solid var(--line); background: var(--white); color: var(--ink);
+}
+.btn:hover { background: var(--line-2); }
+.btn-primary { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.btn-primary:hover { opacity: .85; }
+.btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 6px; }
+.btn-ghost { border-color: transparent; background: none; color: var(--ink-3); }
+.btn-ghost:hover { background: var(--line-2); color: var(--ink); }
+.btn-full { width: 100%; justify-content: center; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--line-2); border: 1px solid var(--line);
+  border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--ink-2);
+}
+.tag button { background: none; border: none; cursor: pointer; color: var(--ink-4); font-size: 14px; line-height: 1; padding: 0; }
+.tag button:hover { color: var(--red); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-red { background: var(--red-bg); color: var(--red); }
+.badge-amber { background: var(--amber-bg); color: var(--amber); }
+.badge-gray { background: var(--line-2); color: var(--ink-3); }
+.search-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; border-bottom: 1px solid var(--line-2);
+}
+.search-row:last-child { border-bottom: none; }
+.search-row-name { font-size: 14px; font-weight: 500; }
+.search-row-meta { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.search-row-meta code { font-family: 'DM Mono', monospace; background: var(--line-2); padding: 1px 6px; border-radius: 4px; font-size: 11px; }
+.rating-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.rating-row-label { flex: 1; font-size: 13px; min-width: 0; }
+.rating-btns { display: flex; gap: 4px; flex-shrink: 0; }
+.r-btn {
+  width: 34px; height: 30px; border: 1px solid var(--line);
+  border-radius: 6px; cursor: pointer; font-family: 'DM Mono', monospace;
+  font-size: 12px; font-weight: 500; background: var(--white); color: var(--ink-3);
+  transition: all .15s;
+}
+.r-btn:hover { border-color: var(--ink-2); color: var(--ink); }
+.r-btn.sel { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.scale-legend { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-4); margin-bottom: 12px; font-style: italic; }
+.rec-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.rec-btn {
+  padding: 7px 16px; border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 500;
+  border: 1px solid var(--line); background: var(--white); color: var(--ink-2);
+  transition: all .15s;
+}
+.rec-btn:hover { border-color: var(--ink-2); }
+.rec-btn.sel-yes { background: var(--green-bg); color: var(--green); border-color: #a8dbc0; }
+.rec-btn.sel-maybe { background: var(--amber-bg); color: var(--amber); border-color: #f0d080; }
+.rec-btn.sel-no { background: var(--red-bg); color: var(--red); border-color: #f5c5c2; }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+.metric { background: var(--line-2); border-radius: 10px; padding: 14px 16px; }
+.metric-val { font-size: 26px; font-weight: 500; line-height: 1; margin-bottom: 3px; }
+.metric-lbl { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; }
+.cand-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
+.cand-tab {
+  padding: 5px 14px; border-radius: 20px; font-size: 13px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--white); color: var(--ink-2); transition: all .15s;
+}
+.cand-tab:hover { border-color: var(--ink-2); }
+.cand-tab.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.comp-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.comp-bar-name { font-size: 12px; color: var(--ink-3); width: 170px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.comp-bar-bg { flex: 1; height: 5px; background: var(--line-2); border-radius: 3px; }
+.comp-bar-fill { height: 100%; border-radius: 3px; background: var(--ink); transition: width .4s ease; }
+.comp-bar-val { font-size: 12px; font-family: 'DM Mono', monospace; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
+.fb-card { background: var(--line-2); border-radius: 10px; padding: 14px; margin-bottom: 8px; }
+.fb-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.fb-card-who { font-size: 13px; font-weight: 500; }
+.fb-card-role { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.fb-card-body { font-size: 12px; color: var(--ink-2); }
+.fb-card-body strong { font-weight: 500; color: var(--ink); }
+.fb-card-body p { margin-bottom: 4px; }
+.section-divider { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-4); margin: 1.25rem 0 .75rem; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.empty { text-align: center; padding: 2.5rem 1rem; color: var(--ink-4); font-size: 13px; }
+.err-msg { font-size: 12px; color: var(--red); margin-top: 6px; }
+.mono { font-family: 'DM Mono', monospace; }
+.quick-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.quick-btn { padding: 3px 10px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid var(--line); background: var(--white); color: var(--ink-3); transition: all .12s; }
+.quick-btn:hover { border-color: var(--ink-2); color: var(--ink); background: var(--line-2); }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--ink); border-radius: 50%; animation: spin .6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.page { display: none; }
+.page.active { display: block; }
+.confirm-banner { background: var(--green-bg); border: 1px solid #a8dbc0; border-radius: 10px; padding: 1.25rem; text-align: center; margin-top: 1rem; }
+.confirm-banner h3 { font-size: 15px; font-weight: 500; color: var(--green); margin-bottom: .25rem; }
+.confirm-banner p { font-size: 13px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar" style="display:none">
+  <div class="topbar-brand">Advent · Interview Feedback</div>
+  <div class="topbar-nav">
+    <button onclick="showAdmin('searches')" id="nav-searches">Searches</button>
+    <button onclick="showAdmin('dashboard')" id="nav-dashboard">Dashboard</button>
+    <button onclick="showAdmin('new')" id="nav-new">+ New search</button>
+  </div>
+  <div class="topbar-right">
+    <button class="btn btn-sm btn-ghost" onclick="logout()">Sign out</button>
+  </div>
+</div>
+
+<div id="gatePage" class="gate-screen">
+  <div class="gate-box">
+    <div class="logo">Advent</div>
+    <h1>Interview Feedback</h1>
+    <p>Secure candidate evaluation platform</p>
+    <div class="field">
+      <label>Admin password</label>
+      <input type="password" id="adminPass" placeholder="Enter password" onkeydown="if(event.key==='Enter')adminLogin()">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="adminLogin()">Sign in as admin</button>
+    <div class="err-msg" id="adminErr" style="display:none">Incorrect password.</div>
+    <hr class="gate-divider">
+    <p style="font-size:13px;color:var(--ink-3);margin-bottom:.75rem">Interviewer? Enter your access code.</p>
+    <button class="btn btn-full" onclick="showIvrGate()">Access interview form →</button>
+  </div>
+</div>
+
+<div id="ivrGatePage" class="gate-screen" style="display:none">
+  <div class="gate-box">
+    <div class="logo">Advent</div>
+    <h1>Interview Form</h1>
+    <p>Enter the access code from your invitation email</p>
+    <div class="field">
+      <label>Access code</label>
+      <input type="text" id="ivrCode" placeholder="e.g. LEILA-2025" onkeydown="if(event.key==='Enter')checkIvrCode()" style="text-transform:uppercase;font-family:'DM Mono',monospace;letter-spacing:.06em">
+    </div>
+    <button class="btn btn-primary btn-full" id="ivrCodeBtn" onclick="checkIvrCode()">Continue</button>
+    <div class="err-msg" id="ivrErr" style="display:none">Invalid code. Please check your invitation.</div>
+    <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="showGate()">← Back</button>
+  </div>
+</div>
+
+<div id="searchesPage" class="page">
+  <div class="wrap">
+    <div class="card">
+      <div class="card-label">Active searches</div>
+      <div id="searchList"><div class="empty">Loading...</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="newPage" class="page">
+  <div class="wrap">
+    <div class="card">
+      <div class="card-label">Search details</div>
+      <div class="grid2">
+        <div class="field"><label>Project / search name</label><input id="ns_name" placeholder="e.g. Project Leila"></div>
+        <div class="field"><label>Company</label><input id="ns_company" placeholder="e.g. Salt & Stone"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Role</label><input id="ns_role" placeholder="e.g. Chief Executive Officer"></div>
+        <div class="field"><label>Interviewer access code</label><input id="ns_code" placeholder="e.g. LEILA-2025" style="font-family:'DM Mono',monospace;text-transform:uppercase"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Competencies to evaluate</div>
+      <p style="font-size:12px;color:var(--ink-3);margin-bottom:12px">Interviewers will rate each competency 1–3.</p>
+      <div style="display:flex;gap:8px">
+        <input id="compInput" placeholder="Add a competency..." style="flex:1" onkeydown="if(event.key==='Enter')addComp()">
+        <button class="btn btn-sm" onclick="addComp()">Add</button>
+      </div>
+      <div class="tag-wrap" id="compTags"></div>
+      <div style="margin-top:14px">
+        <div style="font-size:11px;color:var(--ink-4);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;font-weight:600">Quick-add</div>
+        <div class="quick-wrap" id="quickComps"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Candidates</div>
+      <p style="font-size:12px;color:var(--ink-3);margin-bottom:12px">Add now or from the dashboard later.</p>
+      <div style="display:flex;gap:8px">
+        <input id="candInput" placeholder="Candidate name..." style="flex:1" onkeydown="if(event.key==='Enter')addCand()">
+        <button class="btn btn-sm" onclick="addCand()">Add</button>
+      </div>
+      <div class="tag-wrap" id="candTags"></div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:.5rem">
+      <button class="btn" onclick="showAdmin('searches')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSearch()" id="saveSearchBtn">Create search</button>
+    </div>
+    <div class="err-msg" id="nsErr" style="display:none;text-align:right;margin-top:6px"></div>
+  </div>
+</div>
+
+<div id="dashboardPage" class="page">
+  <div class="wrap">
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-label">Select search</div>
+      <select id="dashSelect" onchange="loadDash()"></select>
+    </div>
+    <div id="dashContent"></div>
+  </div>
+</div>
+
+<div id="ivrPage" class="page">
+  <div class="wrap-narrow" id="ivrFormWrap"></div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://drysisjpqvsccmjxcbnm.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyeXNpc2pwcXZzY2NtanhjYm5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NzQ2MzEsImV4cCI6MjA4OTM1MDYzMX0.NIrybVFigxbIsc4bYacjRLSOoy-actky_I9rY7cKEwc';
+const ADMIN_PASS = 'Advent2024!';
+const QUICK_COMPS = ['CEO experience','Industry background','Brand building','Commercial acumen','Financial acumen','PE-backed experience','Operational acumen','Strategic thinking','People leadership','Growth at scale'];
+
+let isAdmin = false;
+let newComps = [], newCands = [];
+let ivrRatings = {}, ivrRec = null;
+let currentSearchId = null;
+
+async function db(method, table, body, params=''){
+  const url = `${SUPABASE_URL}/rest/v1/${table}${params}`;
+  const res = await fetch(url, {
+    method,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': method==='POST' ? 'return=representation' : ''
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if(!res.ok){ const e=await res.text(); throw new Error(e); }
+  return method==='DELETE' ? null : res.json();
+}
+
+function showGate(){
+  document.getElementById('gatePage').style.display='flex';
+  document.getElementById('ivrGatePage').style.display='none';
+  document.getElementById('topbar').style.display='none';
+  hideAdmin();
+}
+function showIvrGate(){
+  document.getElementById('gatePage').style.display='none';
+  document.getElementById('ivrGatePage').style.display='flex';
+}
+function show(id){ document.getElementById(id).style.display=''; }
+function hide(ids){ (Array.isArray(ids)?ids:[ids]).forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; }); }
+function hideAdmin(){ ['searchesPage','newPage','dashboardPage','ivrPage'].forEach(id=>document.getElementById(id).classList.remove('active')); }
+
+function adminLogin(){
+  if(document.getElementById('adminPass').value === ADMIN_PASS){
+    isAdmin=true;
+    document.getElementById('gatePage').style.display='none';
+    document.getElementById('topbar').style.display='flex';
+    showAdmin('searches');
+  } else {
+    document.getElementById('adminErr').style.display='block';
+  }
+}
+function logout(){
+  isAdmin=false;
+  document.getElementById('adminPass').value='';
+  document.getElementById('adminErr').style.display='none';
+  showGate();
+}
+function showAdmin(page){
+  hideAdmin();
+  document.querySelectorAll('.topbar-nav button').forEach(b=>b.classList.remove('active'));
+  const navBtn = document.getElementById('nav-'+page);
+  if(navBtn) navBtn.classList.add('active');
+  document.getElementById(page==='new'?'newPage':page+'Page').classList.add('active');
+  if(page==='searches') loadSearches();
+  if(page==='new') initNew();
+  if(page==='dashboard') initDash();
+}
+
+async function loadSearches(){
+  const el = document.getElementById('searchList');
+  el.innerHTML = '<div class="empty"><div class="spinner"></div></div>';
+  try{
+    const searches = await db('GET','searches','','?order=created_at.desc&select=*');
+    if(!searches.length){ el.innerHTML='<div class="empty">No searches yet. Create one to get started.</div>'; return; }
+    el.innerHTML = searches.map(s=>`
+      <div class="search-row">
+        <div>
+          <div class="search-row-name">${s.name}</div>
+          <div class="search-row-meta">${s.role} &middot; ${s.company} &middot; ${(s.candidates||[]).length} candidate${(s.candidates||[]).length!==1?'s':''} &middot; Code: <code>${s.code}</code></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="badge badge-green">Active</span>
+          <button class="btn btn-sm" onclick="openDash('${s.id}')">Dashboard</button>
+        </div>
+      </div>
+    `).join('');
+  }catch(e){ el.innerHTML=`<div class="empty">Error loading searches.</div>`; }
+}
+
+function initNew(){
+  ['ns_name','ns_company','ns_role','ns_code','compInput','candInput'].forEach(id=>document.getElementById(id).value='');
+  newComps=[]; newCands=[];
+  renderCompTags(); renderCandTags();
+  document.getElementById('nsErr').style.display='none';
+  document.getElementById('quickComps').innerHTML = QUICK_COMPS.map(c=>`<button class="quick-btn" onclick="quickComp('${c}')">${c}</button>`).join('');
+}
+function addComp(){ const v=document.getElementById('compInput').value.trim(); if(v&&!newComps.includes(v)){newComps.push(v);document.getElementById('compInput').value='';renderCompTags();} }
+function quickComp(c){ if(!newComps.includes(c)){newComps.push(c);renderCompTags();} }
+function removeComp(i){ newComps.splice(i,1);renderCompTags(); }
+function renderCompTags(){ document.getElementById('compTags').innerHTML=newComps.map((c,i)=>`<span class="tag">${c}<button onclick="removeComp(${i})">×</button></span>`).join(''); }
+function addCand(){ const v=document.getElementById('candInput').value.trim(); if(v&&!newCands.includes(v)){newCands.push(v);document.getElementById('candInput').value='';renderCandTags();} }
+function removeCand(i){ newCands.splice(i,1);renderCandTags(); }
+function renderCandTags(){ document.getElementById('candTags').innerHTML=newCands.map((c,i)=>`<span class="tag">${c}<button onclick="removeCand(${i})">×</button></span>`).join(''); }
+
+async function saveSearch(){
+  const name=document.getElementById('ns_name').value.trim();
+  const company=document.getElementById('ns_company').value.trim();
+  const role=document.getElementById('ns_role').value.trim();
+  const code=document.getElementById('ns_code').value.trim().toUpperCase();
+  const errEl=document.getElementById('nsErr');
+  if(!name||!company||!role||!code){errEl.textContent='Please fill in all fields.';errEl.style.display='block';return;}
+  if(newComps.length<2){errEl.textContent='Add at least 2 competencies.';errEl.style.display='block';return;}
+  const btn=document.getElementById('saveSearchBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Saving...';
+  try{
+    await db('POST','searches',{name,company,role,code,competencies:newComps,candidates:newCands});
+    showAdmin('searches');
+  }catch(e){
+    errEl.textContent='Error saving. Code may already be in use.';
+    errEl.style.display='block';
+  }
+  btn.disabled=false; btn.textContent='Create search';
+}
+
+function openDash(sid){
+  currentSearchId=sid;
+  showAdmin('dashboard');
+}
+
+async function initDash(){
+  const sel=document.getElementById('dashSelect');
+  try{
+    const searches=await db('GET','searches','','?order=created_at.desc&select=*');
+    sel.innerHTML='<option value="">Select a search...</option>'+searches.map(s=>`<option value="${s.id}">${s.name} — ${s.company}</option>`).join('');
+    if(currentSearchId) sel.value=currentSearchId;
+  }catch(e){}
+  loadDash();
+}
+
+async function loadDash(){
+  const sid=document.getElementById('dashSelect').value;
+  const el=document.getElementById('dashContent');
+  if(!sid){el.innerHTML='';return;}
+  el.innerHTML='<div class="card"><div class="empty"><div class="spinner"></div></div></div>';
+  try{
+    const [search,feedback]=await Promise.all([
+      db('GET','searches','',`?id=eq.${sid}&select=*`).then(r=>r[0]),
+      db('GET','feedback','',`?search_id=eq.${sid}&select=*&order=submitted_at.desc`)
+    ]);
+    currentSearchId=sid;
+    const candidates=[...new Set([...(search.candidates||[]),...feedback.map(f=>f.candidate)])];
+    el.innerHTML=`
+      <div class="card">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.25rem">
+          <div>
+            <div style="font-size:18px;font-weight:500">${search.name}</div>
+            <div style="font-size:13px;color:var(--ink-3);margin-top:2px">${search.role} &middot; ${search.company}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:11px;color:var(--ink-4);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Interviewer code</div>
+            <div class="mono" style="font-size:16px;font-weight:500;background:var(--line-2);padding:4px 10px;border-radius:6px">${search.code}</div>
+          </div>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="metric-val">${feedback.length}</div><div class="metric-lbl">Responses</div></div>
+          <div class="metric"><div class="metric-val">${candidates.length}</div><div class="metric-lbl">Candidates</div></div>
+          <div class="metric"><div class="metric-val">${(search.competencies||[]).length}</div><div class="metric-lbl">Competencies</div></div>
+        </div>
+        <button class="btn btn-sm" onclick="addCandidatePrompt('${sid}')">+ Add candidate</button>
+      </div>
+      ${candidates.length===0
+        ? '<div class="card"><div class="empty">No candidates yet.</div></div>'
+        : `<div class="card">
+            <div class="card-label">Candidate feedback</div>
+            <div class="cand-tabs" id="candTabs">
+              ${candidates.map((c,i)=>`<button class="cand-tab${i===0?' active':''}" onclick="selectCand(this,'${c.replace(/'/g,"\\'")}',${JSON.stringify(feedback).replace(/</g,'\\u003c')},${JSON.stringify(search).replace(/</g,'\\u003c')})">${c}</button>`).join('')}
+            </div>
+            <div id="candDetail"></div>
+          </div>`
+      }
+    `;
+    if(candidates.length>0) renderCandDetail(candidates[0], feedback, search);
+  }catch(e){ el.innerHTML=`<div class="card"><div class="empty">Error loading dashboard.</div></div>`; }
+}
+
+function selectCand(btn, name, feedback, search){
+  document.querySelectorAll('.cand-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCandDetail(name, feedback, search);
+}
+
+function renderCandDetail(name, feedback, search){
+  const fb = feedback.filter(f=>f.candidate===name);
+  const el = document.getElementById('candDetail');
+  if(!el) return;
+  if(!fb.length){ el.innerHTML=`<div class="empty" style="padding:1rem">No feedback submitted for ${name} yet.</div>`; return; }
+  const recs = fb.map(f=>f.recommendation);
+  const rc = {yes:recs.filter(r=>r==='yes').length, no:recs.filter(r=>r==='no').length, maybe:recs.filter(r=>r==='maybe').length};
+  const comps = search.competencies||[];
+  const compAvgs = comps.map(comp=>{
+    const vals = fb.map(f=>(f.ratings||{})[comp]).filter(v=>v!=null);
+    return { comp, avg: vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null };
+  });
+  const overall = compAvgs.filter(c=>c.avg!=null);
+  const overallAvg = overall.length ? overall.reduce((s,c)=>s+c.avg,0)/overall.length : null;
+
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;gap:1.5rem;padding:.75rem 0 1.25rem;border-bottom:1px solid var(--line-2);margin-bottom:1.25rem">
+      <div style="text-align:center">
+        <div style="font-size:28px;font-weight:500;line-height:1">${overallAvg?overallAvg.toFixed(1):'—'}</div>
+        <div style="font-size:11px;color:var(--ink-4);margin-top:2px">avg score</div>
+      </div>
+      <div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">
+          ${rc.yes?`<span class="badge badge-green">${rc.yes} advance</span>`:''}
+          ${rc.maybe?`<span class="badge badge-amber">${rc.maybe} unsure</span>`:''}
+          ${rc.no?`<span class="badge badge-red">${rc.no} pass</span>`:''}
+        </div>
+        <div style="font-size:12px;color:var(--ink-3)">${fb.length} response${fb.length!==1?'s':''}</div>
+      </div>
+    </div>
+    <div class="section-divider">Competency scores</div>
+    ${compAvgs.map(c=>`
+      <div class="comp-bar-row">
+        <div class="comp-bar-name" title="${c.comp}">${c.comp}</div>
+        <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:${c.avg?(c.avg/3)*100:0}%"></div></div>
+        <div class="comp-bar-val">${c.avg?c.avg.toFixed(1):'—'}</div>
+      </div>
+    `).join('')}
+    <div class="section-divider" style="margin-top:1.5rem">Interviewer notes</div>
+    ${fb.map(f=>`
+      <div class="fb-card">
+        <div class="fb-card-header">
+          <div>
+            <div class="fb-card-who">${f.interviewer}</div>
+            ${f.interviewer_role?`<div class="fb-card-role">${f.interviewer_role}</div>`:''}
+          </div>
+          <span class="badge ${f.recommendation==='yes'?'badge-green':f.recommendation==='no'?'badge-red':'badge-amber'}">${f.recommendation==='yes'?'Advance':f.recommendation==='no'?'Pass':'Unsure'}</span>
+        </div>
+        <div class="fb-card-body">
+          ${f.strengths?`<p><strong>Strengths:</strong> ${f.strengths}</p>`:''}
+          ${f.concerns?`<p><strong>Concerns:</strong> ${f.concerns}</p>`:''}
+          ${f.notes?`<p>${f.notes}</p>`:''}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+async function addCandidatePrompt(sid){
+  const name = prompt('Candidate name:');
+  if(!name||!name.trim()) return;
+  try{
+    const search = await db('GET','searches','',`?id=eq.${sid}&select=*`).then(r=>r[0]);
+    const cands = search.candidates||[];
+    if(!cands.includes(name.trim())) cands.push(name.trim());
+    await db('PATCH','searches',{candidates:cands},`?id=eq.${sid}`);
+    loadDash();
+  }catch(e){ alert('Error adding candidate.'); }
+}
+
+async function checkIvrCode(){
+  const code = document.getElementById('ivrCode').value.trim().toUpperCase();
+  const btn = document.getElementById('ivrCodeBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
+  try{
+    const results = await db('GET','searches','',`?code=eq.${code}&select=*`);
+    if(results.length){
+      document.getElementById('ivrGatePage').style.display='none';
+      showIvrForm(results[0]);
+    } else {
+      document.getElementById('ivrErr').style.display='block';
+    }
+  }catch(e){ document.getElementById('ivrErr').style.display='block'; }
+  btn.disabled=false; btn.textContent='Continue';
+}
+
+function showIvrForm(search){
+  const page = document.getElementById('ivrPage');
+  page.classList.add('active');
+  ivrRatings={}; ivrRec=null;
+  const wrap = document.getElementById('ivrFormWrap');
+  wrap.innerHTML=`
+    <div class="card" style="margin-top:0">
+      <div class="card-label">${search.name}</div>
+      <div style="font-size:15px;font-weight:500">${search.role}</div>
+      <div style="font-size:13px;color:var(--ink-3)">${search.company}</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Your details</div>
+      <div class="field"><label>Your name</label><input id="ivr_name" placeholder="Full name"></div>
+      <div class="field"><label>Role / affiliation</label><input id="ivr_role" placeholder="e.g. Operating Partner, Advent"></div>
+      <div class="field">
+        <label>Candidate</label>
+        <select id="ivr_cand">
+          <option value="">Select candidate...</option>
+          ${(search.candidates||[]).map(c=>`<option value="${c}">${c}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Competency ratings</div>
+      <div class="scale-legend"><span>1 — below expectations</span><span>2 — meets</span><span>3 — exceeds</span></div>
+      ${(search.competencies||[]).map(comp=>`
+        <div class="rating-row">
+          <div class="rating-row-label">${comp}</div>
+          <div class="rating-btns">
+            ${[1,2,3].map(v=>`<button class="r-btn" onclick="selRating(this,'${comp.replace(/'/g,"\\'")}',${v})" data-comp="${comp.replace(/"/g,'&quot;')}" data-val="${v}">${v}</button>`).join('')}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card">
+      <div class="card-label">Qualitative notes</div>
+      <div class="field"><label>Key strengths</label><textarea id="ivr_strengths" placeholder="What stood out positively?"></textarea></div>
+      <div class="field"><label>Concerns or gaps</label><textarea id="ivr_concerns" placeholder="Any hesitations or red flags?"></textarea></div>
+      <div class="field"><label>Additional notes</label><textarea id="ivr_notes" placeholder="Anything else relevant..." style="min-height:60px"></textarea></div>
+      <div class="field">
+        <label>Recommendation</label>
+        <div class="rec-btns" style="margin-top:6px">
+          <button class="rec-btn" id="rec_yes" onclick="selRec('yes')">Advance</button>
+          <button class="rec-btn" id="rec_maybe" onclick="selRec('maybe')">Unsure</button>
+          <button class="rec-btn" id="rec_no" onclick="selRec('no')">Pass</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:2rem">
+      <button class="btn" onclick="showIvrGate()">Back</button>
+      <button class="btn btn-primary" id="submitFbBtn" onclick="submitFeedback('${search.id}',${JSON.stringify(search.competencies||[]).replace(/</g,'\\u003c')})">Submit feedback</button>
+    </div>
+    <div id="submitStatus"></div>
+  `;
+}
+
+function selRating(btn, comp, val){
+  document.querySelectorAll(`.r-btn[data-comp="${btn.dataset.comp}"]`).forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  ivrRatings[comp]=val;
+}
+function selRec(val){
+  ['yes','maybe','no'].forEach(r=>document.getElementById('rec_'+r).classList.remove('sel-yes','sel-maybe','sel-no'));
+  document.getElementById('rec_'+val).classList.add('sel-'+val);
+  ivrRec=val;
+}
+
+async function submitFeedback(searchId, comps){
+  const name=document.getElementById('ivr_name').value.trim();
+  const role=document.getElementById('ivr_role').value.trim();
+  const cand=document.getElementById('ivr_cand').value;
+  if(!name||!cand){alert('Please enter your name and select a candidate.');return;}
+  if(!ivrRec){alert('Please select a recommendation.');return;}
+  const missing=comps.filter(c=>ivrRatings[c]==null);
+  if(missing.length){alert('Please rate all competencies.');return;}
+  const btn=document.getElementById('submitFbBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Submitting...';
+  try{
+    await db('POST','feedback',{
+      search_id: searchId,
+      candidate: cand,
+      interviewer: name,
+      interviewer_role: role,
+      ratings: {...ivrRatings},
+      strengths: document.getElementById('ivr_strengths').value.trim(),
+      concerns: document.getElementById('ivr_concerns').value.trim(),
+      notes: document.getElementById('ivr_notes').value.trim(),
+      recommendation: ivrRec
+    });
+    document.getElementById('submitStatus').innerHTML=`
+      <div class="confirm-banner">
+        <h3>Feedback submitted</h3>
+        <p>Thank you. Your input has been recorded securely.</p>
+      </div>
+    `;
+    window.scrollTo(0,document.body.scrollHeight);
+  }catch(e){
+    alert('Error submitting feedback. Please try again.');
+  }
+  btn.disabled=false; btn.textContent='Submit feedback';
+}
+
+showGate();
+</script>
+</body>
+</html>
