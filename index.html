@@ -74,8 +74,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .search-row-name { font-size: 14px; font-weight: 500; }
 .search-row-meta { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
 .search-row-meta code { font-family: 'DM Mono', monospace; background: var(--line-2); padding: 1px 6px; border-radius: 4px; font-size: 11px; }
-
-/* Category builder */
 .cat-block { border: 1px solid var(--line); border-radius: 10px; padding: 1rem; margin-bottom: 10px; background: var(--line-2); }
 .cat-block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .cat-block-name { font-size: 13px; font-weight: 500; }
@@ -85,8 +83,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .cat-item-desc { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
 .cat-item button { background: none; border: none; cursor: pointer; color: var(--ink-4); font-size: 16px; line-height: 1; padding: 2px; flex-shrink: 0; margin-top: 1px; }
 .cat-item button:hover { color: var(--red); }
-
-/* Rating */
 .rating-section { margin-bottom: 1.5rem; }
 .rating-section-title { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
 .rating-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
@@ -103,7 +99,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .scale-legend { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; margin-bottom: 16px; }
 .scale-legend-item { text-align: center; font-size: 11px; color: var(--ink-4); font-style: italic; line-height: 1.3; }
 .scale-legend-num { display: block; font-family: 'DM Mono', monospace; font-weight: 500; font-style: normal; margin-bottom: 2px; font-size: 12px; }
-
 .rec-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 .rec-btn { padding: 7px 16px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; border: 1px solid var(--line); background: var(--white); color: var(--ink-2); transition: all .15s; }
 .rec-btn:hover { border-color: var(--ink-2); }
@@ -136,8 +131,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .err-msg { font-size: 12px; color: var(--red); margin-top: 6px; }
 .mono { font-family: 'DM Mono', monospace; }
 .quick-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.quick-btn { padding: 3px 10px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid var(--line); background: var(--white); color: var(--ink-3); transition: all .12s; }
-.quick-btn:hover { border-color: var(--ink-2); color: var(--ink); background: var(--line-2); }
 .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--ink); border-radius: 50%; animation: spin .6s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .page { display: none; }
@@ -161,34 +154,35 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   </div>
 </div>
 
+<!-- MAIN GATE: interviewer-first -->
 <div id="gatePage" class="gate-screen">
   <div class="gate-box">
     <div class="logo">Advent</div>
     <h1>Interview Feedback</h1>
-    <p>Secure candidate evaluation platform</p>
+    <p>Enter your access code to submit feedback on a candidate.</p>
     <div class="field">
-      <label>Admin password</label>
-      <input type="password" id="adminPass" placeholder="Enter password" onkeydown="if(event.key==='Enter')adminLogin()">
+      <label>Access code</label>
+      <input type="text" id="ivrCodeMain" placeholder="e.g. LEILA-2025" onkeydown="if(event.key==='Enter')checkIvrCodeMain()" style="text-transform:uppercase;font-family:'DM Mono',monospace;letter-spacing:.06em">
     </div>
-    <button class="btn btn-primary btn-full" onclick="adminLogin()">Sign in as admin</button>
-    <div class="err-msg" id="adminErr" style="display:none">Incorrect password.</div>
-    <hr class="gate-divider">
-    <p style="font-size:13px;color:var(--ink-3);margin-bottom:.75rem">Interviewer? Enter your access code.</p>
-    <button class="btn btn-full" onclick="showIvrGate()">Access interview form →</button>
+    <button class="btn btn-primary btn-full" id="ivrCodeMainBtn" onclick="checkIvrCodeMain()">Continue</button>
+    <div class="err-msg" id="ivrErrMain" style="display:none">Invalid code. Please check your invitation.</div>
+    <div style="margin-top:2.5rem">
+      <button class="btn-ghost btn" style="font-size:11px;color:var(--ink-4);border:none;width:100%;justify-content:center" onclick="showAdminGate()">Admin</button>
+    </div>
   </div>
 </div>
 
-<div id="ivrGatePage" class="gate-screen" style="display:none">
+<!-- ADMIN GATE: hidden unless you know to look -->
+<div id="adminGatePage" class="gate-screen" style="display:none">
   <div class="gate-box">
     <div class="logo">Advent</div>
-    <h1>Interview Form</h1>
-    <p>Enter the access code from your invitation email</p>
+    <h1>Admin</h1>
     <div class="field">
-      <label>Access code</label>
-      <input type="text" id="ivrCode" placeholder="e.g. LEILA-2025" onkeydown="if(event.key==='Enter')checkIvrCode()" style="text-transform:uppercase;font-family:'DM Mono',monospace;letter-spacing:.06em">
+      <label>Password</label>
+      <input type="password" id="adminPass" placeholder="Enter password" onkeydown="if(event.key==='Enter')adminLogin()">
     </div>
-    <button class="btn btn-primary btn-full" id="ivrCodeBtn" onclick="checkIvrCode()">Continue</button>
-    <div class="err-msg" id="ivrErr" style="display:none">Invalid code. Please check your invitation.</div>
+    <button class="btn btn-primary btn-full" onclick="adminLogin()">Sign in</button>
+    <div class="err-msg" id="adminErr" style="display:none">Incorrect password.</div>
     <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="showGate()">← Back</button>
   </div>
 </div>
@@ -215,7 +209,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
         <div class="field"><label>Interviewer access code</label><input id="ns_code" placeholder="e.g. LEILA-2025" style="font-family:'DM Mono',monospace;text-transform:uppercase"></div>
       </div>
     </div>
-
     <div class="card">
       <div class="card-label">Evaluation categories &amp; items</div>
       <p style="font-size:12px;color:var(--ink-3);margin-bottom:1rem">Create categories (e.g. Competencies, Outcomes, Values) and add items within each. Interviewers rate each item 1–4.</p>
@@ -228,7 +221,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
         </div>
       </div>
     </div>
-
     <div class="card">
       <div class="card-label">Candidates</div>
       <p style="font-size:12px;color:var(--ink-3);margin-bottom:12px">Add now or from the dashboard later.</p>
@@ -238,7 +230,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
       </div>
       <div class="tag-wrap" id="candTags"></div>
     </div>
-
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:.5rem">
       <button class="btn" onclick="showAdmin('searches')">Cancel</button>
       <button class="btn btn-primary" onclick="saveSearch()" id="saveSearchBtn">Create search</button>
@@ -267,7 +258,6 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const ADMIN_PASS = 'Advent2024!';
 const SCALE_LABELS = {1:'Definitely no hire',2:'Likely no hire',3:'Likely hire',4:'Definitely hire'};
 
-// categories = [{name, items:[{label, desc}]}]
 let newCategories = [];
 let newCands = [];
 let ivrRatings = {}, ivrRec = null;
@@ -291,19 +281,21 @@ async function db(method, table, body, params=''){
 
 function showGate(){
   document.getElementById('gatePage').style.display='flex';
-  document.getElementById('ivrGatePage').style.display='none';
+  document.getElementById('adminGatePage').style.display='none';
   document.getElementById('topbar').style.display='none';
   hideAdmin();
 }
-function showIvrGate(){
+function showAdminGate(){
   document.getElementById('gatePage').style.display='none';
-  document.getElementById('ivrGatePage').style.display='flex';
+  document.getElementById('adminGatePage').style.display='flex';
 }
-function hideAdmin(){ ['searchesPage','newPage','dashboardPage','ivrPage'].forEach(id=>document.getElementById(id).classList.remove('active')); }
+function hideAdmin(){
+  ['searchesPage','newPage','dashboardPage','ivrPage'].forEach(id=>document.getElementById(id).classList.remove('active'));
+}
 
 function adminLogin(){
   if(document.getElementById('adminPass').value === ADMIN_PASS){
-    document.getElementById('gatePage').style.display='none';
+    document.getElementById('adminGatePage').style.display='none';
     document.getElementById('topbar').style.display='flex';
     showAdmin('searches');
   } else {
@@ -324,6 +316,22 @@ function showAdmin(page){
   if(page==='searches') loadSearches();
   if(page==='new') initNew();
   if(page==='dashboard') initDash();
+}
+
+async function checkIvrCodeMain(){
+  const code = document.getElementById('ivrCodeMain').value.trim().toUpperCase();
+  const btn = document.getElementById('ivrCodeMainBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
+  try{
+    const results = await db('GET','searches','',`?code=eq.${code}&select=*`);
+    if(results.length){
+      document.getElementById('gatePage').style.display='none';
+      showIvrForm(results[0]);
+    } else {
+      document.getElementById('ivrErrMain').style.display='block';
+    }
+  }catch(e){ document.getElementById('ivrErrMain').style.display='block'; }
+  btn.disabled=false; btn.textContent='Continue';
 }
 
 async function loadSearches(){
@@ -356,7 +364,6 @@ function initNew(){
   document.getElementById('nsErr').style.display='none';
 }
 
-// --- Category management ---
 function addCategory(){
   const name = document.getElementById('newCatName').value.trim();
   if(!name) return;
@@ -364,10 +371,7 @@ function addCategory(){
   document.getElementById('newCatName').value='';
   renderCatBlocks();
 }
-function removeCategory(ci){
-  newCategories.splice(ci,1);
-  renderCatBlocks();
-}
+function removeCategory(ci){ newCategories.splice(ci,1); renderCatBlocks(); }
 function addItemToCategory(ci){
   const labelEl = document.getElementById(`item_label_${ci}`);
   const descEl = document.getElementById(`item_desc_${ci}`);
@@ -378,10 +382,7 @@ function addItemToCategory(ci){
   labelEl.value=''; descEl.value='';
   renderCatBlocks();
 }
-function removeItem(ci, ii){
-  newCategories[ci].items.splice(ii,1);
-  renderCatBlocks();
-}
+function removeItem(ci,ii){ newCategories[ci].items.splice(ii,1); renderCatBlocks(); }
 function renderCatBlocks(){
   const el = document.getElementById('catBlocks');
   if(!newCategories.length){ el.innerHTML=''; return; }
@@ -410,9 +411,8 @@ function renderCatBlocks(){
   `).join('');
 }
 
-// --- Candidates ---
 function addCand(){ const v=document.getElementById('candInput').value.trim(); if(v&&!newCands.includes(v)){newCands.push(v);document.getElementById('candInput').value='';renderCandTags();} }
-function removeCand(i){ newCands.splice(i,1);renderCandTags(); }
+function removeCand(i){ newCands.splice(i,1); renderCandTags(); }
 function renderCandTags(){ document.getElementById('candTags').innerHTML=newCands.map((c,i)=>`<span class="tag">${c}<button onclick="removeCand(${i})">×</button></span>`).join(''); }
 
 async function saveSearch(){
@@ -517,8 +517,6 @@ function renderCandDetail(name, feedback, search){
   const categories = search.categories||[];
   const recs = fb.map(f=>f.recommendation);
   const rc = {yes:recs.filter(r=>r==='yes').length, no:recs.filter(r=>r==='no').length, maybe:recs.filter(r=>r==='maybe').length};
-
-  // Compute overall avg across all items
   let allVals=[];
   categories.forEach(cat=>{
     (cat.items||[]).forEach(item=>{
@@ -527,7 +525,6 @@ function renderCandDetail(name, feedback, search){
     });
   });
   const overallAvg = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : null;
-
   const catScoreHTML = categories.map(cat=>{
     const items = cat.items||[];
     return `
@@ -538,7 +535,7 @@ function renderCandDetail(name, feedback, search){
         const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
         return `
           <div class="comp-bar-row">
-            <div class="comp-bar-name" title="${item.label}${item.desc?' — '+item.desc:''}">${item.label}</div>
+            <div class="comp-bar-name" title="${item.label}">${item.label}</div>
             <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:${avg?(avg/4)*100:0}%;background:${avg?scoreColor(avg):'var(--line)'}"></div></div>
             <div class="comp-bar-val" style="color:${avg?scoreColor(avg):'var(--ink-4)'}">${avg?avg.toFixed(1):'—'}</div>
           </div>`;
@@ -593,29 +590,12 @@ async function addCandidatePrompt(sid){
   }catch(e){ alert('Error adding candidate.'); }
 }
 
-async function checkIvrCode(){
-  const code = document.getElementById('ivrCode').value.trim().toUpperCase();
-  const btn = document.getElementById('ivrCodeBtn');
-  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
-  try{
-    const results = await db('GET','searches','',`?code=eq.${code}&select=*`);
-    if(results.length){
-      document.getElementById('ivrGatePage').style.display='none';
-      showIvrForm(results[0]);
-    } else {
-      document.getElementById('ivrErr').style.display='block';
-    }
-  }catch(e){ document.getElementById('ivrErr').style.display='block'; }
-  btn.disabled=false; btn.textContent='Continue';
-}
-
 function showIvrForm(search){
   const page = document.getElementById('ivrPage');
   page.classList.add('active');
   ivrRatings={}; ivrRec=null;
   const categories = search.categories||[];
   const wrap = document.getElementById('ivrFormWrap');
-
   const ratingSections = categories.map(cat=>`
     <div class="rating-section">
       <div class="rating-section-title">${cat.name}</div>
@@ -656,6 +636,7 @@ function showIvrForm(search){
     </div>
     <div class="card">
       <div class="card-label">Evaluation</div>
+      <p style="font-size:12px;color:var(--ink-3);margin-bottom:12px">Rate each item where you have a view. You may skip items outside your area of assessment.</p>
       <div class="scale-legend">
         ${[1,2,3,4].map(v=>`<div class="scale-legend-item"><span class="scale-legend-num">${v}</span>${SCALE_LABELS[v]}</div>`).join('')}
       </div>
@@ -676,7 +657,7 @@ function showIvrForm(search){
       </div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:2rem">
-      <button class="btn" onclick="showIvrGate()">Back</button>
+      <button class="btn" onclick="showGate()">Back</button>
       <button class="btn btn-primary" id="submitFbBtn" onclick="submitFeedback('${search.id}',${JSON.stringify(categories).replace(/</g,'\\u003c').replace(/'/g,'&#39;')})">Submit feedback</button>
     </div>
     <div id="submitStatus"></div>
