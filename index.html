@@ -15,7 +15,6 @@
   --line-2: #f0f0f0;
   --bg: #fafafa;
   --white: #ffffff;
-  --accent: #0f0f0f;
   --green: #1a7a4a;
   --green-bg: #eaf4ee;
   --red: #c0392b;
@@ -27,73 +26,32 @@
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 14px; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  line-height: 1.6;
-  min-height: 100vh;
-}
-.topbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: var(--white);
-  border-bottom: 1px solid var(--line);
-  height: 52px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem;
-}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+.topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--line); height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
 .topbar-brand { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .topbar-nav { display: flex; gap: 4px; }
-.topbar-nav button {
-  background: none; border: none; cursor: pointer;
-  font-family: inherit; font-size: 13px; color: var(--ink-3);
-  padding: 6px 12px; border-radius: 6px; transition: all .15s;
-}
+.topbar-nav button { background: none; border: none; cursor: pointer; font-family: inherit; font-size: 13px; color: var(--ink-3); padding: 6px 12px; border-radius: 6px; transition: all .15s; }
 .topbar-nav button:hover { background: var(--line-2); color: var(--ink); }
 .topbar-nav button.active { background: var(--ink); color: var(--white); }
 .topbar-right { display: flex; gap: 8px; align-items: center; }
 .wrap { max-width: 860px; margin: 0 auto; padding: 80px 2rem 3rem; }
-.wrap-narrow { max-width: 560px; margin: 0 auto; padding: 80px 2rem 3rem; }
-.gate-screen {
-  min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  padding: 2rem;
-}
-.gate-box {
-  background: var(--white); border: 1px solid var(--line);
-  border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 400px;
-  text-align: center;
-}
+.wrap-narrow { max-width: 600px; margin: 0 auto; padding: 80px 2rem 3rem; }
+.gate-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.gate-box { background: var(--white); border: 1px solid var(--line); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 400px; text-align: center; }
 .gate-box .logo { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 2rem; }
 .gate-box h1 { font-size: 22px; font-weight: 500; margin-bottom: .4rem; }
 .gate-box p { font-size: 13px; color: var(--ink-3); margin-bottom: 2rem; }
 .gate-divider { border: none; border-top: 1px solid var(--line); margin: 1.5rem 0; }
-.card {
-  background: var(--white); border: 1px solid var(--line);
-  border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;
-}
-.card-label {
-  font-size: 10px; font-weight: 600; letter-spacing: .08em;
-  text-transform: uppercase; color: var(--ink-4); margin-bottom: 1rem;
-}
+.card { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+.card-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 1rem; }
 .field { margin-bottom: 1rem; }
 .field label { display: block; font-size: 12px; font-weight: 500; color: var(--ink-2); margin-bottom: 5px; }
-input, select, textarea {
-  width: 100%; padding: 9px 12px;
-  border: 1px solid var(--line); border-radius: 8px;
-  font-family: inherit; font-size: 13px; color: var(--ink);
-  background: var(--white); transition: border-color .15s;
-  appearance: none;
-}
+input, select, textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; font-family: inherit; font-size: 13px; color: var(--ink); background: var(--white); transition: border-color .15s; appearance: none; }
 input:focus, select:focus, textarea:focus { outline: none; border-color: var(--ink-2); }
 input::placeholder, textarea::placeholder { color: var(--ink-4); }
-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 9px 18px; border-radius: 8px; font-family: inherit;
-  font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s;
-  border: 1px solid var(--line); background: var(--white); color: var(--ink);
-}
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; border: 1px solid var(--line); background: var(--white); color: var(--ink); }
 .btn:hover { background: var(--line-2); }
 .btn-primary { background: var(--ink); color: var(--white); border-color: var(--ink); }
 .btn-primary:hover { opacity: .85; }
@@ -103,11 +61,7 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
 .btn-full { width: 100%; justify-content: center; }
 button:disabled { opacity: .45; cursor: not-allowed; }
 .tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.tag {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: var(--line-2); border: 1px solid var(--line);
-  border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--ink-2);
-}
+.tag { display: inline-flex; align-items: center; gap: 5px; background: var(--line-2); border: 1px solid var(--line); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--ink-2); }
 .tag button { background: none; border: none; cursor: pointer; color: var(--ink-4); font-size: 14px; line-height: 1; padding: 0; }
 .tag button:hover { color: var(--red); }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
@@ -115,52 +69,60 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .badge-red { background: var(--red-bg); color: var(--red); }
 .badge-amber { background: var(--amber-bg); color: var(--amber); }
 .badge-gray { background: var(--line-2); color: var(--ink-3); }
-.search-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 0; border-bottom: 1px solid var(--line-2);
-}
+.search-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--line-2); }
 .search-row:last-child { border-bottom: none; }
 .search-row-name { font-size: 14px; font-weight: 500; }
 .search-row-meta { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
 .search-row-meta code { font-family: 'DM Mono', monospace; background: var(--line-2); padding: 1px 6px; border-radius: 4px; font-size: 11px; }
-.rating-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.rating-row-label { flex: 1; font-size: 13px; min-width: 0; }
-.rating-btns { display: flex; gap: 4px; flex-shrink: 0; }
-.r-btn {
-  width: 34px; height: 30px; border: 1px solid var(--line);
-  border-radius: 6px; cursor: pointer; font-family: 'DM Mono', monospace;
-  font-size: 12px; font-weight: 500; background: var(--white); color: var(--ink-3);
-  transition: all .15s;
-}
+
+/* Category builder */
+.cat-block { border: 1px solid var(--line); border-radius: 10px; padding: 1rem; margin-bottom: 10px; background: var(--line-2); }
+.cat-block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cat-block-name { font-size: 13px; font-weight: 500; }
+.cat-item { display: flex; align-items: flex-start; gap: 8px; background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; }
+.cat-item-text { flex: 1; min-width: 0; }
+.cat-item-label { font-size: 13px; font-weight: 500; }
+.cat-item-desc { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+.cat-item button { background: none; border: none; cursor: pointer; color: var(--ink-4); font-size: 16px; line-height: 1; padding: 2px; flex-shrink: 0; margin-top: 1px; }
+.cat-item button:hover { color: var(--red); }
+
+/* Rating */
+.rating-section { margin-bottom: 1.5rem; }
+.rating-section-title { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.rating-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.rating-row-left { flex: 1; min-width: 0; }
+.rating-row-label { font-size: 13px; font-weight: 500; }
+.rating-row-desc { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.rating-btns { display: flex; gap: 4px; flex-shrink: 0; margin-top: 2px; }
+.r-btn { width: 34px; height: 30px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; background: var(--white); color: var(--ink-3); transition: all .15s; }
 .r-btn:hover { border-color: var(--ink-2); color: var(--ink); }
-.r-btn.sel { background: var(--ink); color: var(--white); border-color: var(--ink); }
-.scale-legend { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-4); margin-bottom: 12px; font-style: italic; }
+.r-btn.sel-1 { background: var(--red-bg); color: var(--red); border-color: #f5c5c2; }
+.r-btn.sel-2 { background: var(--amber-bg); color: var(--amber); border-color: #f0d080; }
+.r-btn.sel-3 { background: var(--blue-bg); color: var(--blue); border-color: #a8c4e8; }
+.r-btn.sel-4 { background: var(--green-bg); color: var(--green); border-color: #a8dbc0; }
+.scale-legend { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; margin-bottom: 16px; }
+.scale-legend-item { text-align: center; font-size: 11px; color: var(--ink-4); font-style: italic; line-height: 1.3; }
+.scale-legend-num { display: block; font-family: 'DM Mono', monospace; font-weight: 500; font-style: normal; margin-bottom: 2px; font-size: 12px; }
+
 .rec-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.rec-btn {
-  padding: 7px 16px; border-radius: 8px; cursor: pointer;
-  font-family: inherit; font-size: 13px; font-weight: 500;
-  border: 1px solid var(--line); background: var(--white); color: var(--ink-2);
-  transition: all .15s;
-}
+.rec-btn { padding: 7px 16px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; border: 1px solid var(--line); background: var(--white); color: var(--ink-2); transition: all .15s; }
 .rec-btn:hover { border-color: var(--ink-2); }
 .rec-btn.sel-yes { background: var(--green-bg); color: var(--green); border-color: #a8dbc0; }
 .rec-btn.sel-maybe { background: var(--amber-bg); color: var(--amber); border-color: #f0d080; }
 .rec-btn.sel-no { background: var(--red-bg); color: var(--red); border-color: #f5c5c2; }
-.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+.metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.25rem; }
 .metric { background: var(--line-2); border-radius: 10px; padding: 14px 16px; }
 .metric-val { font-size: 26px; font-weight: 500; line-height: 1; margin-bottom: 3px; }
 .metric-lbl { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; }
 .cand-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
-.cand-tab {
-  padding: 5px 14px; border-radius: 20px; font-size: 13px; cursor: pointer;
-  border: 1px solid var(--line); background: var(--white); color: var(--ink-2); transition: all .15s;
-}
+.cand-tab { padding: 5px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid var(--line); background: var(--white); color: var(--ink-2); transition: all .15s; }
 .cand-tab:hover { border-color: var(--ink-2); }
 .cand-tab.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
-.comp-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.comp-bar-name { font-size: 12px; color: var(--ink-3); width: 170px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-cat-title { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-4); margin: 1.25rem 0 .75rem; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.comp-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.comp-bar-name { font-size: 12px; color: var(--ink-2); width: 180px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .comp-bar-bg { flex: 1; height: 5px; background: var(--line-2); border-radius: 3px; }
-.comp-bar-fill { height: 100%; border-radius: 3px; background: var(--ink); transition: width .4s ease; }
+.comp-bar-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
 .comp-bar-val { font-size: 12px; font-family: 'DM Mono', monospace; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
 .fb-card { background: var(--line-2); border-radius: 10px; padding: 14px; margin-bottom: 8px; }
 .fb-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
@@ -253,19 +215,20 @@ button:disabled { opacity: .45; cursor: not-allowed; }
         <div class="field"><label>Interviewer access code</label><input id="ns_code" placeholder="e.g. LEILA-2025" style="font-family:'DM Mono',monospace;text-transform:uppercase"></div>
       </div>
     </div>
+
     <div class="card">
-      <div class="card-label">Competencies to evaluate</div>
-      <p style="font-size:12px;color:var(--ink-3);margin-bottom:12px">Interviewers will rate each competency 1–3.</p>
-      <div style="display:flex;gap:8px">
-        <input id="compInput" placeholder="Add a competency..." style="flex:1" onkeydown="if(event.key==='Enter')addComp()">
-        <button class="btn btn-sm" onclick="addComp()">Add</button>
-      </div>
-      <div class="tag-wrap" id="compTags"></div>
-      <div style="margin-top:14px">
-        <div style="font-size:11px;color:var(--ink-4);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;font-weight:600">Quick-add</div>
-        <div class="quick-wrap" id="quickComps"></div>
+      <div class="card-label">Evaluation categories &amp; items</div>
+      <p style="font-size:12px;color:var(--ink-3);margin-bottom:1rem">Create categories (e.g. Competencies, Outcomes, Values) and add items within each. Interviewers rate each item 1–4.</p>
+      <div id="catBlocks"></div>
+      <div style="border:1px dashed var(--line);border-radius:10px;padding:1rem;margin-top:8px">
+        <div style="font-size:12px;font-weight:500;margin-bottom:8px;color:var(--ink-2)">Add new category</div>
+        <div style="display:flex;gap:8px">
+          <input id="newCatName" placeholder="Category name (e.g. Competencies)" style="flex:1" onkeydown="if(event.key==='Enter')addCategory()">
+          <button class="btn btn-sm btn-primary" onclick="addCategory()">Add category</button>
+        </div>
       </div>
     </div>
+
     <div class="card">
       <div class="card-label">Candidates</div>
       <p style="font-size:12px;color:var(--ink-3);margin-bottom:12px">Add now or from the dashboard later.</p>
@@ -275,6 +238,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
       </div>
       <div class="tag-wrap" id="candTags"></div>
     </div>
+
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:.5rem">
       <button class="btn" onclick="showAdmin('searches')">Cancel</button>
       <button class="btn btn-primary" onclick="saveSearch()" id="saveSearchBtn">Create search</button>
@@ -301,10 +265,11 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 const SUPABASE_URL = 'https://drysisjpqvsccmjxcbnm.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyeXNpc2pwcXZzY2NtanhjYm5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NzQ2MzEsImV4cCI6MjA4OTM1MDYzMX0.NIrybVFigxbIsc4bYacjRLSOoy-actky_I9rY7cKEwc';
 const ADMIN_PASS = 'Advent2024!';
-const QUICK_COMPS = ['CEO experience','Industry background','Brand building','Commercial acumen','Financial acumen','PE-backed experience','Operational acumen','Strategic thinking','People leadership','Growth at scale'];
+const SCALE_LABELS = {1:'Definitely no hire',2:'Likely no hire',3:'Likely hire',4:'Definitely hire'};
 
-let isAdmin = false;
-let newComps = [], newCands = [];
+// categories = [{name, items:[{label, desc}]}]
+let newCategories = [];
+let newCands = [];
 let ivrRatings = {}, ivrRec = null;
 let currentSearchId = null;
 
@@ -334,13 +299,10 @@ function showIvrGate(){
   document.getElementById('gatePage').style.display='none';
   document.getElementById('ivrGatePage').style.display='flex';
 }
-function show(id){ document.getElementById(id).style.display=''; }
-function hide(ids){ (Array.isArray(ids)?ids:[ids]).forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; }); }
 function hideAdmin(){ ['searchesPage','newPage','dashboardPage','ivrPage'].forEach(id=>document.getElementById(id).classList.remove('active')); }
 
 function adminLogin(){
   if(document.getElementById('adminPass').value === ADMIN_PASS){
-    isAdmin=true;
     document.getElementById('gatePage').style.display='none';
     document.getElementById('topbar').style.display='flex';
     showAdmin('searches');
@@ -349,7 +311,6 @@ function adminLogin(){
   }
 }
 function logout(){
-  isAdmin=false;
   document.getElementById('adminPass').value='';
   document.getElementById('adminErr').style.display='none';
   showGate();
@@ -371,32 +332,85 @@ async function loadSearches(){
   try{
     const searches = await db('GET','searches','','?order=created_at.desc&select=*');
     if(!searches.length){ el.innerHTML='<div class="empty">No searches yet. Create one to get started.</div>'; return; }
-    el.innerHTML = searches.map(s=>`
-      <div class="search-row">
-        <div>
-          <div class="search-row-name">${s.name}</div>
-          <div class="search-row-meta">${s.role} &middot; ${s.company} &middot; ${(s.candidates||[]).length} candidate${(s.candidates||[]).length!==1?'s':''} &middot; Code: <code>${s.code}</code></div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span class="badge badge-green">Active</span>
-          <button class="btn btn-sm" onclick="openDash('${s.id}')">Dashboard</button>
-        </div>
-      </div>
-    `).join('');
+    el.innerHTML = searches.map(s=>{
+      const totalItems = (s.categories||[]).reduce((n,c)=>n+(c.items||[]).length,0);
+      return `
+        <div class="search-row">
+          <div>
+            <div class="search-row-name">${s.name}</div>
+            <div class="search-row-meta">${s.role} &middot; ${s.company} &middot; ${(s.candidates||[]).length} candidate${(s.candidates||[]).length!==1?'s':''} &middot; ${totalItems} items &middot; Code: <code>${s.code}</code></div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="badge badge-green">Active</span>
+            <button class="btn btn-sm" onclick="openDash('${s.id}')">Dashboard</button>
+          </div>
+        </div>`;
+    }).join('');
   }catch(e){ el.innerHTML=`<div class="empty">Error loading searches.</div>`; }
 }
 
 function initNew(){
-  ['ns_name','ns_company','ns_role','ns_code','compInput','candInput'].forEach(id=>document.getElementById(id).value='');
-  newComps=[]; newCands=[];
-  renderCompTags(); renderCandTags();
+  ['ns_name','ns_company','ns_role','ns_code','candInput','newCatName'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  newCategories=[]; newCands=[];
+  renderCatBlocks(); renderCandTags();
   document.getElementById('nsErr').style.display='none';
-  document.getElementById('quickComps').innerHTML = QUICK_COMPS.map(c=>`<button class="quick-btn" onclick="quickComp('${c}')">${c}</button>`).join('');
 }
-function addComp(){ const v=document.getElementById('compInput').value.trim(); if(v&&!newComps.includes(v)){newComps.push(v);document.getElementById('compInput').value='';renderCompTags();} }
-function quickComp(c){ if(!newComps.includes(c)){newComps.push(c);renderCompTags();} }
-function removeComp(i){ newComps.splice(i,1);renderCompTags(); }
-function renderCompTags(){ document.getElementById('compTags').innerHTML=newComps.map((c,i)=>`<span class="tag">${c}<button onclick="removeComp(${i})">×</button></span>`).join(''); }
+
+// --- Category management ---
+function addCategory(){
+  const name = document.getElementById('newCatName').value.trim();
+  if(!name) return;
+  newCategories.push({name, items:[]});
+  document.getElementById('newCatName').value='';
+  renderCatBlocks();
+}
+function removeCategory(ci){
+  newCategories.splice(ci,1);
+  renderCatBlocks();
+}
+function addItemToCategory(ci){
+  const labelEl = document.getElementById(`item_label_${ci}`);
+  const descEl = document.getElementById(`item_desc_${ci}`);
+  const label = labelEl.value.trim();
+  const desc = descEl.value.trim();
+  if(!label) return;
+  newCategories[ci].items.push({label, desc});
+  labelEl.value=''; descEl.value='';
+  renderCatBlocks();
+}
+function removeItem(ci, ii){
+  newCategories[ci].items.splice(ii,1);
+  renderCatBlocks();
+}
+function renderCatBlocks(){
+  const el = document.getElementById('catBlocks');
+  if(!newCategories.length){ el.innerHTML=''; return; }
+  el.innerHTML = newCategories.map((cat,ci)=>`
+    <div class="cat-block">
+      <div class="cat-block-header">
+        <div class="cat-block-name">${cat.name}</div>
+        <button class="btn btn-sm" style="color:var(--red);border-color:#f5c5c2" onclick="removeCategory(${ci})">Remove</button>
+      </div>
+      ${cat.items.map((item,ii)=>`
+        <div class="cat-item">
+          <div class="cat-item-text">
+            <div class="cat-item-label">${item.label}</div>
+            ${item.desc?`<div class="cat-item-desc">${item.desc}</div>`:''}
+          </div>
+          <button onclick="removeItem(${ci},${ii})">×</button>
+        </div>
+      `).join('')}
+      <div style="background:var(--white);border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:6px">
+        <div style="font-size:11px;color:var(--ink-4);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Add item to ${cat.name}</div>
+        <input id="item_label_${ci}" placeholder="Item name (e.g. CEO experience)" style="margin-bottom:6px" onkeydown="if(event.key==='Enter')addItemToCategory(${ci})">
+        <textarea id="item_desc_${ci}" placeholder="Description (optional — shown to interviewers)" style="margin-bottom:6px;min-height:50px"></textarea>
+        <button class="btn btn-sm" onclick="addItemToCategory(${ci})">+ Add item</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// --- Candidates ---
 function addCand(){ const v=document.getElementById('candInput').value.trim(); if(v&&!newCands.includes(v)){newCands.push(v);document.getElementById('candInput').value='';renderCandTags();} }
 function removeCand(i){ newCands.splice(i,1);renderCandTags(); }
 function renderCandTags(){ document.getElementById('candTags').innerHTML=newCands.map((c,i)=>`<span class="tag">${c}<button onclick="removeCand(${i})">×</button></span>`).join(''); }
@@ -408,11 +422,12 @@ async function saveSearch(){
   const code=document.getElementById('ns_code').value.trim().toUpperCase();
   const errEl=document.getElementById('nsErr');
   if(!name||!company||!role||!code){errEl.textContent='Please fill in all fields.';errEl.style.display='block';return;}
-  if(newComps.length<2){errEl.textContent='Add at least 2 competencies.';errEl.style.display='block';return;}
+  const totalItems=newCategories.reduce((n,c)=>n+c.items.length,0);
+  if(!newCategories.length||totalItems<2){errEl.textContent='Add at least one category with 2+ items.';errEl.style.display='block';return;}
   const btn=document.getElementById('saveSearchBtn');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Saving...';
   try{
-    await db('POST','searches',{name,company,role,code,competencies:newComps,candidates:newCands});
+    await db('POST','searches',{name,company,role,code,categories:newCategories,candidates:newCands});
     showAdmin('searches');
   }catch(e){
     errEl.textContent='Error saving. Code may already be in use.';
@@ -421,10 +436,7 @@ async function saveSearch(){
   btn.disabled=false; btn.textContent='Create search';
 }
 
-function openDash(sid){
-  currentSearchId=sid;
-  showAdmin('dashboard');
-}
+function openDash(sid){ currentSearchId=sid; showAdmin('dashboard'); }
 
 async function initDash(){
   const sel=document.getElementById('dashSelect');
@@ -447,7 +459,9 @@ async function loadDash(){
       db('GET','feedback','',`?search_id=eq.${sid}&select=*&order=submitted_at.desc`)
     ]);
     currentSearchId=sid;
+    const categories=search.categories||[];
     const candidates=[...new Set([...(search.candidates||[]),...feedback.map(f=>f.candidate)])];
+    const totalItems=categories.reduce((n,c)=>n+(c.items||[]).length,0);
     el.innerHTML=`
       <div class="card">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.25rem">
@@ -463,7 +477,7 @@ async function loadDash(){
         <div class="metrics">
           <div class="metric"><div class="metric-val">${feedback.length}</div><div class="metric-lbl">Responses</div></div>
           <div class="metric"><div class="metric-val">${candidates.length}</div><div class="metric-lbl">Candidates</div></div>
-          <div class="metric"><div class="metric-val">${(search.competencies||[]).length}</div><div class="metric-lbl">Competencies</div></div>
+          <div class="metric"><div class="metric-val">${totalItems}</div><div class="metric-lbl">Eval items</div></div>
         </div>
         <button class="btn btn-sm" onclick="addCandidatePrompt('${sid}')">+ Add candidate</button>
       </div>
@@ -488,25 +502,53 @@ function selectCand(btn, name, feedback, search){
   renderCandDetail(name, feedback, search);
 }
 
+function scoreColor(avg){
+  if(avg>=3.5) return 'var(--green)';
+  if(avg>=2.5) return 'var(--blue)';
+  if(avg>=1.5) return 'var(--amber)';
+  return 'var(--red)';
+}
+
 function renderCandDetail(name, feedback, search){
   const fb = feedback.filter(f=>f.candidate===name);
   const el = document.getElementById('candDetail');
   if(!el) return;
   if(!fb.length){ el.innerHTML=`<div class="empty" style="padding:1rem">No feedback submitted for ${name} yet.</div>`; return; }
+  const categories = search.categories||[];
   const recs = fb.map(f=>f.recommendation);
   const rc = {yes:recs.filter(r=>r==='yes').length, no:recs.filter(r=>r==='no').length, maybe:recs.filter(r=>r==='maybe').length};
-  const comps = search.competencies||[];
-  const compAvgs = comps.map(comp=>{
-    const vals = fb.map(f=>(f.ratings||{})[comp]).filter(v=>v!=null);
-    return { comp, avg: vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null };
+
+  // Compute overall avg across all items
+  let allVals=[];
+  categories.forEach(cat=>{
+    (cat.items||[]).forEach(item=>{
+      const key=`${cat.name}||${item.label}`;
+      fb.forEach(f=>{ const v=(f.ratings||{})[key]; if(v!=null) allVals.push(v); });
+    });
   });
-  const overall = compAvgs.filter(c=>c.avg!=null);
-  const overallAvg = overall.length ? overall.reduce((s,c)=>s+c.avg,0)/overall.length : null;
+  const overallAvg = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : null;
+
+  const catScoreHTML = categories.map(cat=>{
+    const items = cat.items||[];
+    return `
+      <div class="dash-cat-title">${cat.name}</div>
+      ${items.map(item=>{
+        const key=`${cat.name}||${item.label}`;
+        const vals=fb.map(f=>(f.ratings||{})[key]).filter(v=>v!=null);
+        const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
+        return `
+          <div class="comp-bar-row">
+            <div class="comp-bar-name" title="${item.label}${item.desc?' — '+item.desc:''}">${item.label}</div>
+            <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:${avg?(avg/4)*100:0}%;background:${avg?scoreColor(avg):'var(--line)'}"></div></div>
+            <div class="comp-bar-val" style="color:${avg?scoreColor(avg):'var(--ink-4)'}">${avg?avg.toFixed(1):'—'}</div>
+          </div>`;
+      }).join('')}`;
+  }).join('');
 
   el.innerHTML=`
     <div style="display:flex;align-items:center;gap:1.5rem;padding:.75rem 0 1.25rem;border-bottom:1px solid var(--line-2);margin-bottom:1.25rem">
       <div style="text-align:center">
-        <div style="font-size:28px;font-weight:500;line-height:1">${overallAvg?overallAvg.toFixed(1):'—'}</div>
+        <div style="font-size:28px;font-weight:500;line-height:1;color:${overallAvg?scoreColor(overallAvg):'var(--ink-4)'}">${overallAvg?overallAvg.toFixed(1):'—'}</div>
         <div style="font-size:11px;color:var(--ink-4);margin-top:2px">avg score</div>
       </div>
       <div>
@@ -518,14 +560,7 @@ function renderCandDetail(name, feedback, search){
         <div style="font-size:12px;color:var(--ink-3)">${fb.length} response${fb.length!==1?'s':''}</div>
       </div>
     </div>
-    <div class="section-divider">Competency scores</div>
-    ${compAvgs.map(c=>`
-      <div class="comp-bar-row">
-        <div class="comp-bar-name" title="${c.comp}">${c.comp}</div>
-        <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:${c.avg?(c.avg/3)*100:0}%"></div></div>
-        <div class="comp-bar-val">${c.avg?c.avg.toFixed(1):'—'}</div>
-      </div>
-    `).join('')}
+    ${catScoreHTML}
     <div class="section-divider" style="margin-top:1.5rem">Interviewer notes</div>
     ${fb.map(f=>`
       <div class="fb-card">
@@ -578,7 +613,29 @@ function showIvrForm(search){
   const page = document.getElementById('ivrPage');
   page.classList.add('active');
   ivrRatings={}; ivrRec=null;
+  const categories = search.categories||[];
   const wrap = document.getElementById('ivrFormWrap');
+
+  const ratingSections = categories.map(cat=>`
+    <div class="rating-section">
+      <div class="rating-section-title">${cat.name}</div>
+      ${(cat.items||[]).map(item=>{
+        const key=`${cat.name}||${item.label}`;
+        const safeKey=key.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        return `
+          <div class="rating-row">
+            <div class="rating-row-left">
+              <div class="rating-row-label">${item.label}</div>
+              ${item.desc?`<div class="rating-row-desc">${item.desc}</div>`:''}
+            </div>
+            <div class="rating-btns">
+              ${[1,2,3,4].map(v=>`<button class="r-btn" onclick="selRating(this,'${safeKey}',${v})" data-key="${safeKey}" data-val="${v}">${v}</button>`).join('')}
+            </div>
+          </div>`;
+      }).join('')}
+    </div>
+  `).join('');
+
   wrap.innerHTML=`
     <div class="card" style="margin-top:0">
       <div class="card-label">${search.name}</div>
@@ -598,16 +655,11 @@ function showIvrForm(search){
       </div>
     </div>
     <div class="card">
-      <div class="card-label">Competency ratings</div>
-      <div class="scale-legend"><span>1 — below expectations</span><span>2 — meets</span><span>3 — exceeds</span></div>
-      ${(search.competencies||[]).map(comp=>`
-        <div class="rating-row">
-          <div class="rating-row-label">${comp}</div>
-          <div class="rating-btns">
-            ${[1,2,3].map(v=>`<button class="r-btn" onclick="selRating(this,'${comp.replace(/'/g,"\\'")}',${v})" data-comp="${comp.replace(/"/g,'&quot;')}" data-val="${v}">${v}</button>`).join('')}
-          </div>
-        </div>
-      `).join('')}
+      <div class="card-label">Evaluation</div>
+      <div class="scale-legend">
+        ${[1,2,3,4].map(v=>`<div class="scale-legend-item"><span class="scale-legend-num">${v}</span>${SCALE_LABELS[v]}</div>`).join('')}
+      </div>
+      ${ratingSections}
     </div>
     <div class="card">
       <div class="card-label">Qualitative notes</div>
@@ -625,16 +677,16 @@ function showIvrForm(search){
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:2rem">
       <button class="btn" onclick="showIvrGate()">Back</button>
-      <button class="btn btn-primary" id="submitFbBtn" onclick="submitFeedback('${search.id}',${JSON.stringify(search.competencies||[]).replace(/</g,'\\u003c')})">Submit feedback</button>
+      <button class="btn btn-primary" id="submitFbBtn" onclick="submitFeedback('${search.id}',${JSON.stringify(categories).replace(/</g,'\\u003c').replace(/'/g,'&#39;')})">Submit feedback</button>
     </div>
     <div id="submitStatus"></div>
   `;
 }
 
-function selRating(btn, comp, val){
-  document.querySelectorAll(`.r-btn[data-comp="${btn.dataset.comp}"]`).forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  ivrRatings[comp]=val;
+function selRating(btn, key, val){
+  document.querySelectorAll(`.r-btn[data-key="${btn.dataset.key}"]`).forEach(b=>{ b.classList.remove('sel-1','sel-2','sel-3','sel-4'); });
+  btn.classList.add(`sel-${val}`);
+  ivrRatings[key]=val;
 }
 function selRec(val){
   ['yes','maybe','no'].forEach(r=>document.getElementById('rec_'+r).classList.remove('sel-yes','sel-maybe','sel-no'));
@@ -642,14 +694,16 @@ function selRec(val){
   ivrRec=val;
 }
 
-async function submitFeedback(searchId, comps){
+async function submitFeedback(searchId, categories){
   const name=document.getElementById('ivr_name').value.trim();
   const role=document.getElementById('ivr_role').value.trim();
   const cand=document.getElementById('ivr_cand').value;
   if(!name||!cand){alert('Please enter your name and select a candidate.');return;}
   if(!ivrRec){alert('Please select a recommendation.');return;}
-  const missing=comps.filter(c=>ivrRatings[c]==null);
-  if(missing.length){alert('Please rate all competencies.');return;}
+  const allKeys=[];
+  categories.forEach(cat=>(cat.items||[]).forEach(item=>allKeys.push(`${cat.name}||${item.label}`)));
+  const missing=allKeys.filter(k=>ivrRatings[k]==null);
+  if(missing.length){alert('Please rate all items before submitting.');return;}
   const btn=document.getElementById('submitFbBtn');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Submitting...';
   try{
@@ -668,8 +722,7 @@ async function submitFeedback(searchId, comps){
       <div class="confirm-banner">
         <h3>Feedback submitted</h3>
         <p>Thank you. Your input has been recorded securely.</p>
-      </div>
-    `;
+      </div>`;
     window.scrollTo(0,document.body.scrollHeight);
   }catch(e){
     alert('Error submitting feedback. Please try again.');
