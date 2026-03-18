@@ -137,6 +137,22 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .confirm-banner { background: var(--green-bg); border: 1px solid #a8dbc0; border-radius: 10px; padding: 1.25rem; text-align: center; margin-top: 1rem; }
 .confirm-banner h3 { font-size: 15px; font-weight: 500; color: var(--green); margin-bottom: .25rem; }
 .confirm-banner p { font-size: 13px; color: var(--ink-3); }
+.cat-note { font-size: 12px; color: var(--ink-3); font-style: italic; margin-top: 2px; }
+.rec-card { background: var(--blue-bg); border: 1px solid #a8c4e8; border-radius: 10px; padding: 1.25rem; margin-top: 1rem; }
+.rec-card h4 { font-size: 13px; font-weight: 600; color: var(--blue); margin-bottom: .75rem; }
+.rec-card ul { list-style: none; padding: 0; }
+.rec-card li { font-size: 12px; color: var(--ink-2); padding: 4px 0; padding-left: 16px; position: relative; }
+.rec-card li::before { content: '→'; position: absolute; left: 0; color: var(--blue); }
+.rec-card .rec-subsection { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-4); margin-top: .75rem; margin-bottom: .35rem; }
+.rec-card .rec-subsection:first-child { margin-top: 0; }
+@media print {
+  body { background: white; }
+  .topbar, .gate-screen, .cand-tabs, .btn, select, .rec-card { display: none !important; }
+  .card { break-inside: avoid; border: 1px solid #ddd; }
+  .page, .page.active { display: block !important; }
+  #dashboardPage { display: block !important; }
+  #printSummary { display: block !important; }
+}
 </style>
 </head>
 <body>
@@ -196,7 +212,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 <div id="newPage" class="page">
   <div class="wrap">
     <div class="card">
-      <div class="card-label">Search details</div>
+      <div class="card-label" id="formTitle">Search details</div>
       <div class="grid2">
         <div class="field"><label>Project / search name</label><input id="ns_name" placeholder="e.g. Project Leila"></div>
         <div class="field"><label>Company</label><input id="ns_company" placeholder="e.g. Salt & Stone"></div>
@@ -228,7 +244,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
       <div class="tag-wrap" id="candTags"></div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:.5rem">
-      <button class="btn" onclick="showAdmin('searches')">Cancel</button>
+      <button class="btn" onclick="cancelEdit()">Cancel</button>
       <button class="btn btn-primary" onclick="saveSearch()" id="saveSearchBtn">Create search</button>
     </div>
     <div class="err-msg" id="nsErr" style="display:none;text-align:right;margin-top:6px"></div>
@@ -249,6 +265,8 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   <div class="wrap-narrow" id="ivrFormWrap"></div>
 </div>
 
+<div id="printSummary" style="display:none"></div>
+
 <script>
 const SUPABASE_URL = 'https://drysisjpqvsccmjxcbnm.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyeXNpc2pwcXZzY2NtanhjYm5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NzQ2MzEsImV4cCI6MjA4OTM1MDYzMX0.NIrybVFigxbIsc4bYacjRLSOoy-actky_I9rY7cKEwc';
@@ -258,9 +276,11 @@ const SCALE_LABELS = {1:'Definitely no hire',2:'Likely no hire',3:'Likely hire',
 let newCategories = [];
 let newCands = [];
 let ivrRatings = {};
+let ivrCategoryNotes = {};
 let ivrRec = null;
 let currentSearchId = null;
 let currentSearch = null;
+let editingSearchId = null;
 
 async function db(method, table, body, params=''){
   const url = `${SUPABASE_URL}/rest/v1/${table}${params}`;
@@ -317,6 +337,11 @@ function showAdmin(page){
   if(page==='dashboard') initDash();
 }
 
+function cancelEdit(){
+  editingSearchId=null;
+  showAdmin('searches');
+}
+
 async function checkIvrCodeMain(){
   const code = document.getElementById('ivrCodeMain').value.trim().toUpperCase();
   const btn = document.getElementById('ivrCodeMainBtn');
@@ -349,18 +374,39 @@ async function loadSearches(){
           </div>
           <div style="display:flex;gap:8px;align-items:center">
             <span class="badge badge-green">Active</span>
+            <button class="btn btn-sm" onclick="editSearch('${s.id}')">Edit</button>
             <button class="btn btn-sm" onclick="openDash('${s.id}')">Dashboard</button>
           </div>
         </div>`;
     }).join('');
-  }catch(e){ el.innerHTML=`<div class="empty">Error loading searches.</div>`; }
+  }catch(e){ el.innerHTML='<div class="empty">Error loading searches.</div>'; }
 }
 
 function initNew(){
-  ['ns_name','ns_company','ns_role','ns_code','candInput','newCatName'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-  newCategories=[]; newCands=[];
+  if(!editingSearchId){
+    ['ns_name','ns_company','ns_role','ns_code','candInput','newCatName'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    newCategories=[]; newCands=[];
+    document.getElementById('formTitle').textContent='Search details';
+    document.getElementById('saveSearchBtn').textContent='Create search';
+  }
   renderCatBlocks(); renderCandTags();
   document.getElementById('nsErr').style.display='none';
+}
+
+async function editSearch(sid){
+  try{
+    const search = await db('GET','searches','',`?id=eq.${sid}&select=*`).then(r=>r[0]);
+    editingSearchId = sid;
+    document.getElementById('ns_name').value = search.name||'';
+    document.getElementById('ns_company').value = search.company||'';
+    document.getElementById('ns_role').value = search.role||'';
+    document.getElementById('ns_code').value = search.code||'';
+    newCategories = JSON.parse(JSON.stringify(search.categories||[]));
+    newCands = [...(search.candidates||[])];
+    document.getElementById('formTitle').textContent='Edit search';
+    document.getElementById('saveSearchBtn').textContent='Save changes';
+    showAdmin('new');
+  }catch(e){ alert('Error loading search for editing.'); }
 }
 
 function addCategory(){
@@ -426,13 +472,19 @@ async function saveSearch(){
   const btn=document.getElementById('saveSearchBtn');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Saving...';
   try{
-    await db('POST','searches',{name,company,role,code,categories:newCategories,candidates:newCands});
+    const payload = {name,company,role,code,categories:newCategories,candidates:newCands};
+    if(editingSearchId){
+      await db('PATCH','searches',payload,`?id=eq.${editingSearchId}`);
+      editingSearchId=null;
+    } else {
+      await db('POST','searches',payload);
+    }
     showAdmin('searches');
   }catch(e){
     errEl.textContent='Error saving. Code may already be in use.';
     errEl.style.display='block';
   }
-  btn.disabled=false; btn.textContent='Create search';
+  btn.disabled=false; btn.textContent=editingSearchId?'Save changes':'Create search';
 }
 
 function openDash(sid){ currentSearchId=sid; showAdmin('dashboard'); }
@@ -447,6 +499,8 @@ async function initDash(){
   loadDash();
 }
 
+let dashSearch=null, dashFeedback=[], dashCandidates=[];
+
 async function loadDash(){
   const sid=document.getElementById('dashSelect').value;
   const el=document.getElementById('dashContent');
@@ -458,8 +512,10 @@ async function loadDash(){
       db('GET','feedback','',`?search_id=eq.${sid}&select=*&order=submitted_at.desc`)
     ]);
     currentSearchId=sid;
+    dashSearch=search; dashFeedback=feedback;
     const categories=search.categories||[];
     const candidates=[...new Set([...(search.candidates||[]),...feedback.map(f=>f.candidate)])];
+    dashCandidates=candidates;
     const totalItems=categories.reduce((n,c)=>n+(c.items||[]).length,0);
     el.innerHTML=`
       <div class="card">
@@ -478,27 +534,31 @@ async function loadDash(){
           <div class="metric"><div class="metric-val">${candidates.length}</div><div class="metric-lbl">Candidates</div></div>
           <div class="metric"><div class="metric-val">${totalItems}</div><div class="metric-lbl">Eval items</div></div>
         </div>
-        <button class="btn btn-sm" onclick="addCandidatePrompt('${sid}')">+ Add candidate</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" onclick="addCandidatePrompt('${sid}')">+ Add candidate</button>
+          <button class="btn btn-sm" onclick="editSearch('${sid}')">Edit search</button>
+          <button class="btn btn-sm" onclick="exportSummary()">Export summary</button>
+        </div>
       </div>
       ${candidates.length===0
         ? '<div class="card"><div class="empty">No candidates yet.</div></div>'
         : `<div class="card">
             <div class="card-label">Candidate feedback</div>
             <div class="cand-tabs" id="candTabs">
-              ${candidates.map((c,i)=>`<button class="cand-tab${i===0?' active':''}" onclick="selectCand(this,'${c.replace(/'/g,"\\'")}',${JSON.stringify(feedback).replace(/</g,'\\u003c')},${JSON.stringify(search).replace(/</g,'\\u003c')})">${c}</button>`).join('')}
+              ${candidates.map((c,i)=>`<button class="cand-tab${i===0?' active':''}" onclick="selectCandByName('${c.replace(/'/g,"\\'")}')">${c}</button>`).join('')}
             </div>
             <div id="candDetail"></div>
           </div>`
       }
     `;
     if(candidates.length>0) renderCandDetail(candidates[0], feedback, search);
-  }catch(e){ el.innerHTML=`<div class="card"><div class="empty">Error loading dashboard.</div></div>`; }
+  }catch(e){ el.innerHTML='<div class="card"><div class="empty">Error loading dashboard.</div></div>'; }
 }
 
-function selectCand(btn, name, feedback, search){
+function selectCandByName(name){
   document.querySelectorAll('.cand-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderCandDetail(name, feedback, search);
+  document.querySelectorAll('.cand-tab').forEach(b=>{ if(b.textContent===name) b.classList.add('active'); });
+  renderCandDetail(name, dashFeedback, dashSearch);
 }
 
 function scoreColor(avg){
@@ -524,8 +584,15 @@ function renderCandDetail(name, feedback, search){
     });
   });
   const overallAvg = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : null;
+
+  // Build category scores + per-category notes from interviewers
   const catScoreHTML = categories.map(cat=>{
     const items = cat.items||[];
+    const catNotes = fb.map(f=>{
+      const cn = (f.category_notes||{})[cat.name];
+      return cn ? {who:f.interviewer, note:cn} : null;
+    }).filter(Boolean);
+
     return `
       <div class="dash-cat-title">${cat.name}</div>
       ${items.map(item=>{
@@ -538,7 +605,36 @@ function renderCandDetail(name, feedback, search){
             <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:${avg?(avg/4)*100:0}%;background:${avg?scoreColor(avg):'var(--line)'}"></div></div>
             <div class="comp-bar-val" style="color:${avg?scoreColor(avg):'var(--ink-4)'}">${avg?avg.toFixed(1):'—'}</div>
           </div>`;
-      }).join('')}`;
+      }).join('')}
+      ${catNotes.length?`<div style="margin-top:6px">${catNotes.map(cn=>`<div class="cat-note"><strong>${cn.who}:</strong> ${cn.note}</div>`).join('')}</div>`:''}`;
+  }).join('');
+
+  // Build recommendations
+  const recsHTML = buildRecommendations(fb, categories);
+
+  // Build interviewer notes - handle both old (strengths/concerns) and new (notes only) formats
+  const notesHTML = fb.map(f=>{
+    const hasLegacy = f.strengths || f.concerns;
+    const hasNotes = f.notes;
+    let bodyHTML = '';
+    if(hasLegacy){
+      if(f.strengths) bodyHTML += `<p><strong>Strengths:</strong> ${f.strengths}</p>`;
+      if(f.concerns) bodyHTML += `<p><strong>Concerns:</strong> ${f.concerns}</p>`;
+      if(hasNotes) bodyHTML += `<p>${f.notes}</p>`;
+    } else if(hasNotes){
+      bodyHTML = `<p>${f.notes}</p>`;
+    }
+    return `
+      <div class="fb-card">
+        <div class="fb-card-header">
+          <div>
+            <div class="fb-card-who">${f.interviewer}</div>
+            ${f.interviewer_role?`<div class="fb-card-role">${f.interviewer_role}</div>`:''}
+          </div>
+          <span class="badge ${f.recommendation==='yes'?'badge-green':f.recommendation==='no'?'badge-red':'badge-amber'}">${f.recommendation==='yes'?'Advance':f.recommendation==='no'?'Pass':'Unsure'}</span>
+        </div>
+        <div class="fb-card-body">${bodyHTML}</div>
+      </div>`;
   }).join('');
 
   el.innerHTML=`
@@ -557,24 +653,147 @@ function renderCandDetail(name, feedback, search){
       </div>
     </div>
     ${catScoreHTML}
+    ${recsHTML}
     <div class="section-divider" style="margin-top:1.5rem">Interviewer notes</div>
-    ${fb.map(f=>`
-      <div class="fb-card">
-        <div class="fb-card-header">
-          <div>
-            <div class="fb-card-who">${f.interviewer}</div>
-            ${f.interviewer_role?`<div class="fb-card-role">${f.interviewer_role}</div>`:''}
-          </div>
-          <span class="badge ${f.recommendation==='yes'?'badge-green':f.recommendation==='no'?'badge-red':'badge-amber'}">${f.recommendation==='yes'?'Advance':f.recommendation==='no'?'Pass':'Unsure'}</span>
+    ${notesHTML}
+  `;
+}
+
+function buildRecommendations(fb, categories){
+  if(!fb.length) return '';
+  const gaps = [];
+  const mixedSignals = [];
+  const lowCoverageCats = [];
+  const questions = [];
+
+  categories.forEach(cat=>{
+    const items = cat.items||[];
+    let catRated = 0, catTotal = items.length;
+    items.forEach(item=>{
+      const key = `${cat.name}||${item.label}`;
+      const vals = fb.map(f=>(f.ratings||{})[key]).filter(v=>v!=null);
+      if(vals.length <= 1){
+        gaps.push(`${item.label} (${cat.name})`);
+      }
+      if(vals.length >= 2){
+        const spread = Math.max(...vals) - Math.min(...vals);
+        if(spread >= 2) mixedSignals.push(`${item.label} (${cat.name}) — ratings range from ${Math.min(...vals)} to ${Math.max(...vals)}`);
+      }
+      if(vals.length > 0) catRated++;
+    });
+    if(catTotal > 0 && catRated/catTotal < 0.5){
+      lowCoverageCats.push(cat.name);
+    }
+  });
+
+  // Extract questions from notes
+  fb.forEach(f=>{
+    const allText = [f.notes, f.strengths, f.concerns].filter(Boolean).join(' ');
+    const sentences = allText.split(/[.!?]+/).filter(s=>s.includes('?'));
+    sentences.forEach(s=>{
+      const q = s.trim();
+      if(q.length > 10) questions.push({who: f.interviewer, q: q+'?'});
+    });
+    // Also check category notes
+    const cn = f.category_notes||{};
+    Object.values(cn).forEach(note=>{
+      const sens = note.split(/[.!?]+/).filter(s=>s.includes('?'));
+      sens.forEach(s=>{ const q=s.trim(); if(q.length>10) questions.push({who:f.interviewer, q:q+'?'}); });
+    });
+  });
+
+  const hasContent = gaps.length || mixedSignals.length || lowCoverageCats.length || questions.length;
+  if(!hasContent) return '';
+
+  let html = '<div class="rec-card"><h4>Recommendations for future interviews</h4>';
+
+  if(gaps.length){
+    html += `<div class="rec-subsection">Needs deeper assessment (0–1 ratings)</div><ul>`;
+    gaps.slice(0,8).forEach(g=>{ html+=`<li>${g}</li>`; });
+    if(gaps.length>8) html+=`<li>...and ${gaps.length-8} more</li>`;
+    html += '</ul>';
+  }
+  if(mixedSignals.length){
+    html += `<div class="rec-subsection">Mixed signals — probe further</div><ul>`;
+    mixedSignals.forEach(m=>{ html+=`<li>${m}</li>`; });
+    html += '</ul>';
+  }
+  if(lowCoverageCats.length){
+    html += `<div class="rec-subsection">Under-assessed categories</div><ul>`;
+    lowCoverageCats.forEach(c=>{ html+=`<li>${c} — less than half of items rated</li>`; });
+    html += '</ul>';
+  }
+  if(questions.length){
+    html += `<div class="rec-subsection">Questions raised by interviewers</div><ul>`;
+    questions.slice(0,6).forEach(q=>{ html+=`<li><strong>${q.who}:</strong> ${q.q}</li>`; });
+    html += '</ul>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function exportSummary(){
+  if(!dashSearch || !dashCandidates.length){ alert('No data to export.'); return; }
+  // Find currently selected candidate
+  const activeTab = document.querySelector('.cand-tab.active');
+  const candName = activeTab ? activeTab.textContent : dashCandidates[0];
+  const fb = dashFeedback.filter(f=>f.candidate===candName);
+  const categories = dashSearch.categories||[];
+  const recs = fb.map(f=>f.recommendation);
+  const rc = {yes:recs.filter(r=>r==='yes').length, no:recs.filter(r=>r==='no').length, maybe:recs.filter(r=>r==='maybe').length};
+
+  let allVals=[];
+  categories.forEach(cat=>{
+    (cat.items||[]).forEach(item=>{
+      const key=`${cat.name}||${item.label}`;
+      fb.forEach(f=>{ const v=(f.ratings||{})[key]; if(v!=null) allVals.push(v); });
+    });
+  });
+  const overallAvg = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : null;
+
+  let html = `
+    <div style="font-family:'DM Sans',sans-serif;max-width:800px;margin:0 auto;padding:2rem;color:#0f0f0f">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;border-bottom:2px solid #0f0f0f;padding-bottom:1rem">
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#a8a8a8;margin-bottom:4px">ADVENT</div>
+          <div style="font-size:20px;font-weight:500">${candName}</div>
+          <div style="font-size:13px;color:#717171">${dashSearch.role} — ${dashSearch.company} (${dashSearch.name})</div>
         </div>
-        <div class="fb-card-body">
-          ${f.strengths?`<p><strong>Strengths:</strong> ${f.strengths}</p>`:''}
-          ${f.concerns?`<p><strong>Concerns:</strong> ${f.concerns}</p>`:''}
-          ${f.notes?`<p>${f.notes}</p>`:''}
+        <div style="text-align:right">
+          <div style="font-size:32px;font-weight:500">${overallAvg?overallAvg.toFixed(1):'—'}</div>
+          <div style="font-size:11px;color:#717171">avg score (1–4)</div>
         </div>
       </div>
-    `).join('')}
-  `;
+      <div style="display:flex;gap:12px;margin-bottom:1.5rem">
+        ${rc.yes?`<span style="background:#eaf4ee;color:#1a7a4a;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500">${rc.yes} Advance</span>`:''}
+        ${rc.maybe?`<span style="background:#fef7e6;color:#8a5c00;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500">${rc.maybe} Unsure</span>`:''}
+        ${rc.no?`<span style="background:#fcecea;color:#c0392b;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500">${rc.no} Pass</span>`:''}
+        <span style="color:#717171;font-size:12px;padding:3px 0">${fb.length} response${fb.length!==1?'s':''}</span>
+      </div>`;
+
+  categories.forEach(cat=>{
+    html += `<div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#a8a8a8;margin:1rem 0 .5rem;border-bottom:1px solid #e8e8e8;padding-bottom:4px">${cat.name}</div>`;
+    (cat.items||[]).forEach(item=>{
+      const key=`${cat.name}||${item.label}`;
+      const vals=fb.map(f=>(f.ratings||{})[key]).filter(v=>v!=null);
+      const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
+      html += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:12px"><span style="width:180px;color:#3a3a3a">${item.label}</span><span style="font-family:'DM Mono',monospace;font-weight:500">${avg?avg.toFixed(1):'—'}</span></div>`;
+    });
+  });
+
+  html += `<div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#a8a8a8;margin:1.25rem 0 .5rem;border-bottom:1px solid #e8e8e8;padding-bottom:4px">Interviewer feedback</div>`;
+  fb.forEach(f=>{
+    const text = [f.strengths, f.concerns, f.notes].filter(Boolean).join(' | ');
+    const recLabel = f.recommendation==='yes'?'Advance':f.recommendation==='no'?'Pass':'Unsure';
+    html += `<div style="margin-bottom:8px;font-size:12px"><strong>${f.interviewer}</strong>${f.interviewer_role?' ('+f.interviewer_role+')':''} — <em>${recLabel}</em>${text?': '+text:''}</div>`;
+  });
+
+  html += '</div>';
+
+  const printWin = window.open('','_blank','width=850,height=1100');
+  printWin.document.write(`<!DOCTYPE html><html><head><title>${candName} — Feedback Summary</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"><style>@media print{body{margin:0}}</style></head><body>${html}<script>setTimeout(()=>window.print(),500)<\/script></body></html>`);
+  printWin.document.close();
 }
 
 async function addCandidatePrompt(sid){
@@ -593,10 +812,12 @@ function showIvrForm(search){
   currentSearch = search;
   const page = document.getElementById('ivrPage');
   page.classList.add('active');
-  ivrRatings={}; ivrRec=null;
+  ivrRatings={}; ivrRec=null; ivrCategoryNotes={};
   const categories = search.categories||[];
   const wrap = document.getElementById('ivrFormWrap');
-  const ratingSections = categories.map(cat=>`
+  const ratingSections = categories.map((cat,ci)=>{
+    const safeCatName = cat.name.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    return `
     <div class="rating-section">
       <div class="rating-section-title">${cat.name}</div>
       ${(cat.items||[]).map(item=>{
@@ -613,8 +834,11 @@ function showIvrForm(search){
             </div>
           </div>`;
       }).join('')}
-    </div>
-  `).join('');
+      <div style="margin-top:6px">
+        <textarea id="cat_note_${ci}" placeholder="Any additional notes on ${cat.name}? (optional)" style="min-height:40px;font-size:12px" oninput="ivrCategoryNotes['${safeCatName}']=this.value"></textarea>
+      </div>
+    </div>`;
+  }).join('');
 
   wrap.innerHTML=`
     <div class="card" style="margin-top:0">
@@ -643,10 +867,8 @@ function showIvrForm(search){
       ${ratingSections}
     </div>
     <div class="card">
-      <div class="card-label">Qualitative notes</div>
-      <div class="field"><label>Key strengths</label><textarea id="ivr_strengths" placeholder="What stood out positively?"></textarea></div>
-      <div class="field"><label>Concerns or gaps</label><textarea id="ivr_concerns" placeholder="Any hesitations or red flags?"></textarea></div>
-      <div class="field"><label>Additional notes</label><textarea id="ivr_notes" placeholder="Anything else relevant..." style="min-height:60px"></textarea></div>
+      <div class="card-label">Overall feedback</div>
+      <div class="field"><label>Your assessment</label><textarea id="ivr_notes" placeholder="Share your overall assessment — strengths, concerns, and any other observations." style="min-height:100px"></textarea></div>
       <div class="field">
         <label>Recommendation</label>
         <div class="rec-btns" style="margin-top:6px">
@@ -686,6 +908,11 @@ async function submitFeedback(){
   categories.forEach(cat=>(cat.items||[]).forEach(item=>allKeys.push(`${cat.name}||${item.label}`)));
   const answered=allKeys.filter(k=>ivrRatings[k]!=null);
   if(!answered.length){alert('Please rate at least one item before submitting.');return;}
+
+  // Clean up category notes — remove empty ones
+  const cleanCatNotes = {};
+  Object.entries(ivrCategoryNotes).forEach(([k,v])=>{ if(v&&v.trim()) cleanCatNotes[k]=v.trim(); });
+
   const btn=document.getElementById('submitFbBtn');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Submitting...';
   try{
@@ -695,9 +922,10 @@ async function submitFeedback(){
       interviewer: name,
       interviewer_role: role,
       ratings: {...ivrRatings},
-      strengths: document.getElementById('ivr_strengths').value.trim(),
-      concerns: document.getElementById('ivr_concerns').value.trim(),
+      strengths: '',
+      concerns: '',
       notes: document.getElementById('ivr_notes').value.trim(),
+      category_notes: cleanCatNotes,
       recommendation: ivrRec
     });
     document.getElementById('submitStatus').innerHTML=`
